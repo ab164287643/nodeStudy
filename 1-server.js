@@ -24,12 +24,21 @@ app.use(function (req, res, next) {
 
 
 app.get('/', function (req, res) {
-    res.send('Hello World! This is express server');
+	let str = `
+		${process.argv.toString()}
+	<br/>`;
+    res.send(str + 'Hello World! This is express server');
 });
 
 var server = app.listen(3000, function () {
     var host = server.address().address;
     var port = server.address().port;
 
+
     console.log('Example app listening at http://%s:%s', host, port);
 });
+function compute (){
+	console.log(1);
+	process.nextTick(compute)
+}
+compute();
