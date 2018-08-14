@@ -1,0 +1,22 @@
+{
+  "name": "nodestudy",
+  "version": "1.0.0",
+  "description": "a repository for node.js study",
+  "main": "1-server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ab164287643/nodeStudy.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ab164287643/nodeStudy/issues"
+  },
+  "homepage": "https://github.com/ab164287643/nodeStudy#readme",
+  "dependencies": {
+    "express": "^4.16.3"
+  }
+}
