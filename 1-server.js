@@ -1,34 +1,7 @@
-// var http = require('http');
-// http.createServer(function (request, response) {
-
-//     // 发送 HTTP 头部 
-//     // HTTP 状态值: 200 : OK
-//     // 内容类型: text/plain
-//     response.writeHead(200, {'Content-Type': 'text/plain'});
-
-//     // 发送响应数据 "Hello World"
-//     response.end('Hello World\n');
-// }).listen(8888);
-
-// // 终端打印如下信息
-// console.log('Server running at http://127.0.0.1:8888/');
 
 var express = require('express');
 var app = express();
 
-//中间件
-app.use(function (req, res, next) {
-    console.log('Time:', Date.now());
-    next();
-});
-
-
-app.get('/', function (req, res) {
-	let str = `
-		${process.argv.toString()}
-	<br/>`;
-    res.send(str + 'Hello World! This is express server');
-});
 
 var server = app.listen(3000, function () {
     var host = server.address().address;
@@ -37,5 +10,32 @@ var server = app.listen(3000, function () {
 
     console.log('Example app listening at http://%s:%s', host, port);
 });
+
+//中间件
+app.use(function (req, res, next) {
+    console.log('Time:', Date.now());
+    next();
+});
+// 定制 404 页面
+// app.use(function (req, res, next) {
+//     res.type('text/plain');
+//     res.status(404);
+//     res.send('404 - Not Found');
+// });
+//路由
+app.get('/', function (req, res) {
+    res.send('Hello World! This is express server');
+});
+app.get('/about', function (req, res) {
+    res.send('Hello World! about Router!');
+});
+//查看header信息
+app.get('/headers', function (req, res) {
+    res.set('Content-Type', 'text/plain');
+    var s = '';
+    for (var name in req.headers) s += name + ': ' + req.headers[name] + '\n';
+    res.send(s);
+});
+
 
 
