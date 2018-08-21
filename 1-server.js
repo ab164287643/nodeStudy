@@ -24,7 +24,8 @@ app.use(function (req, res, next) {
 // });
 //路由
 app.get('/', function (req, res) {
-    res.send('Hello World! This is express server');
+    // res.send('Hello World! This is express server');
+    res.sendFile( __dirname + "/3-formSubmit-Fronted.html");
 });
 app.get('/about', function (req, res) {
     res.send('Hello World! about Router!');
@@ -35,6 +36,9 @@ app.get('/headers', function (req, res) {
     var s = '';
     for (var name in req.headers) s += name + ': ' + req.headers[name] + '\n';
     res.send(s);
+});
+app.get('/no-layout', function (req, res) {
+    res.render('no-layout', { layout: null });
 });
 
 
