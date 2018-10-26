@@ -8,20 +8,48 @@
     <title>sql操作</title>
 </head>
 <body>
-    <form action="http://localhost:3000/insert" method="POST">
+    <form  id="userInfo" method="POST">
         <div class="form-group">
             <label>用户名</label>
-            <input type="text" name="userName" class="form-control" id="">
+            <input type="text" name="userName" class="form-control">
         </div>
         <div class="form-group">
             <label>密码</label>
-            <input type="password" name="password" class="form-control" id="">
+            <input type="password" name="password" class="form-control">
         </div><div class="form-group">
             <label>邮箱</label>
-            <input type="text" name="email" class="form-control" id="">
+            <input type="text" name="email" class="form-control">
         </div>
-        <input type="submit" class="btn btn-primary" value="submit" id="">
+        <input type="submit" id="submit" class="btn btn-primary" value="submit">
     </form>
+    <ul id="contentWraper">
+
+    </ul>
+    <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script>
+        let url = "http://localhost:3000/insert";
+        $("#submit").click(function (e){
+            let form = document.querySelector("#userInfo");
+            let formData = new FormData(form);
+            $.ajax({
+                url,
+                type: 'post',
+                data: formData,
+                dataType: 'json',
+                processData: false,
+                contentType: false,
+                success: function (response){
+                    if (response.code == 200){
+                        response.data.forEach((v) => {
+                            $("#contentWraper").append($(`<li>${v.userName}</li>`));
+                        });
+                    }
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown){}
+            });
+            return false;
+        });
+    </script>
 </body>
 </html>

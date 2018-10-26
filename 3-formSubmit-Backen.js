@@ -2,8 +2,23 @@ var express = require('express');
 var multer = require('multer');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+
 var app = express();
 const port = 3000;
+
+app.all('*', function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "http://localhost:8080");
+    res.header("Access-Control-Allow-Credentials", "true");
+    res.header("Access-Control-Allow-Headers", "X-Requested-With");
+    res.header("Access-Control-Allow-Methods","PUT,POST,GET,DELETE,OPTIONS");
+    res.header("X-Powered-By",' 3.2.1')
+    res.header("Content-Type", "application/json;charset=utf-8");
+    next();
+});
+
+//设置静态文件夹 也就是这个文件夹里面的资源可以用 http://xxx.com/xxx.jpg 这种方式在浏览器中打开
+app.use('/uploads',express.static('uploads'));
+
 
 // create application/json parser
 var jsonParser = bodyParser.json();
@@ -40,7 +55,7 @@ var upload = multer({
 }); //保存在uploads文件夹中  multer是一个构造函数
 //文件上传   单文件上传
 app.post('/fileupload', upload.single("file"), function (req, res, next) {
-    console.log(req.file);//文件对象   file非前端的name
+    console.log(req);//文件对象   file非前端的name
 
     //设置签名cookie
     res.cookie('signedCookie', true, {
@@ -53,13 +68,22 @@ app.post('/fileupload', upload.single("file"), function (req, res, next) {
     // Cookies that have been signed
     console.log('Signed Cookies: ', req.signedCookies)//signed cookie在客户端存储是经过加密的
 
-    res.send("upload success!!!");
+    console.log(req)
+    // res.json({
+    //     url: ,
+    //     name: ,
+    // });
+    let json = {
+        url: `${req.protocol}://${req.get('host')}/${req.file.path}`,  //req.protocol + '://' + req.get('host')
+        name: req.file.filename
+    };
+    res.json(json);
 });
 //多文件上传  
 /*12 是文件限制个数*/
 app.post('/multi-fileupload', upload.array("files", 12), function (req, res, next) {
     console.log(req.files);//文件对象数组  files 非前端的name 
-    let host = req.headers.host;   
+    let host = req.headers.host;
     let htmlStr = "";
     // req.files.forEach((v) => {
     //     htmlStr += `<a href = "${host}\\${v.path}">${v.path}</a><br/>`
