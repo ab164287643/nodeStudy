@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>socket.io</title>
+</head>
+<body>
+    <ul class="message-wraper"></ul>
+    <textarea name="" id="txtarea" cols="30" rows="10">
+
+    </textarea>
+    <button id="send">发送</button>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.js"></script>
+<script src="https://cdn.bootcss.com/socket.io/2.2.0/socket.io.js"></script>
+<script>
+$(function (){
+    var socket = io.connect('192.168.1.112:3000');
+    socket.on("person2", function (data) {
+        //监听自己的消息
+        $(".message-wraper").append(`<li>${data.data}</li>`);
+    })
+
+    // $("#send").on("click", function () {
+    //     //给person1发送消息
+    //     socket.emit("person2", {data: $("#txtarea").val()}, function (data) {
+    //         //获取发送后，由服务器返回的回执信息
+    //         console.log(data);
+    //         $("#txtarea").val("");
+            
+    //     });
+    // })
+
+    //连接 namespace 'namespace1' 然后监听
+    var socket2 = io.connect('192.168.1.112:3000/namespace1');
+    socket2.on("person2", function (data) {
+        //我是person1 监听person1的消息（监听自己的消息）
+        $(".message-wraper").append(`<li>${data.data}</li>`);
+    })
+
+    $("#send").on("click", function () {
+        //
+        socket2.emit("person2", { data: $("#txtarea").val() }, function (data) {
+            //获取发送后，由服务器返回的回执信息
+            $("#txtarea").val("");
+            console.log(data);
+        });
+    })
+});
+</script>
+</body>
+</html>
